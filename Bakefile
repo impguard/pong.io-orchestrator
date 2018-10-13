@@ -1,0 +1,70 @@
+#!/bin/bash
+
+bake_require './bake/utils.sh'
+
+
+bake_task compose "Runs docker compose."
+function compose {
+  docker-compose -f 'build/docker-compose.yml' "$@"
+}
+
+
+bake_task build "Builds the lambda."
+function build {
+ compose build
+}
+
+
+bake_task exec "Runs a command in orchestrator."
+function exec {
+  compose run orchestrator "$@"
+}
+
+
+bake_task run "Runs a task within the orchestrator."
+function run {
+  bake_echo_red "Not sure just yet..."
+}
+
+
+bake_task lint "Runs the linter"
+function lint {
+  bake_echo_red "No linter just yet..."
+}
+
+
+bake_task tag "Tags the current branch with the next version."
+function tag ()
+{
+  if [ -n "$(git status -s)" ]; then
+    bake_echo_red "You have uncommitted changes. Aborting the tag."
+    return 1
+  fi
+
+  git fetch --tags
+
+  local version
+  version=$(version.next)
+
+  if version.exists; then
+    bake_echo_green "$version already exists. Skipping tag."
+    return 0
+  fi
+
+  git tag -a "v_$version" -m "Version $version"
+  git push --tags
+
+  bake_echo_green "Successfully tagged $version"
+}
+
+
+bake_task push "Pushes a build of the specified tier up."
+function push {
+  bake_echo_red "Not sure yet"
+}
+
+
+bake_task deploy "Deploys a build to an environment."
+function deploy {
+  bake_echo_red "Not sure yet"
+}

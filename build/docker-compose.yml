@@ -1,0 +1,10 @@
+version: '3.5'
+services:
+  orchestrator:
+    container_name: "pong-orchestrator"
+    build:
+      context: ..
+      dockerfile: ./build/Dockerfile
+    volumes:
+      - "${PWD}/orchestrator:/var/task/orchestrator"
+      - "${PWD}/requirements.txt:/var/task/requirements.txt"
