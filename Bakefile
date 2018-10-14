@@ -8,28 +8,38 @@ function compose {
   docker-compose -f 'build/docker-compose.yml' "$@"
 }
 
+bake_task init "Initializes the project."
+function init {
+  if ! command -v flake8 >/dev/null; then
+    bake_echo_red 'Please install flake8: pip install flake8'
+    exit 1
+  fi
+
+  bake_echo_green 'Successfully initialized!'
+}
+
 
 bake_task build "Builds the lambda."
 function build {
- compose build
+  compose build
 }
 
 
-bake_task exec "Runs a command in orchestrator."
+bake_task exec "Runs a command in lambda environment."
 function exec {
-  compose run orchestrator "$@"
+  compose run service "$@"
 }
 
 
-bake_task run "Runs a task within the orchestrator."
+bake_task run "Runs a specific task within the orchestrator"
 function run {
-  bake_echo_red "Not sure just yet..."
+  compose up
 }
 
 
 bake_task lint "Runs the linter"
 function lint {
-  bake_echo_red "No linter just yet..."
+  flake8
 }
 
 

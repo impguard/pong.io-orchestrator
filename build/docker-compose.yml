@@ -1,10 +1,9 @@
-version: '3.5'
+version: "3.5"
 services:
-  orchestrator:
+  service:
     container_name: "pong-orchestrator"
     build:
-      context: ..
+      context: ../
       dockerfile: ./build/Dockerfile
     volumes:
-      - "${PWD}/orchestrator:/var/task/orchestrator"
-      - "${PWD}/requirements.txt:/var/task/requirements.txt"
+      - "${PWD}:/workspace"
